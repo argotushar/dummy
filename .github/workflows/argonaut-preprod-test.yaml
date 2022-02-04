@@ -21,6 +21,10 @@ jobs:
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Extract branch name
+        shell: bash
+        run: echo ::set-output name=BRANCH::${GITHUB_REF#refs/heads/})
+        id: get_branch
       - name: Fetch repo
         uses: actions/checkout@v2
       - name: Get Short SHA
@@ -76,5 +80,5 @@ jobs:
           chmod +x ./art
           sudo mv ./art /usr/local/bin/art
           art configure --key ${{ secrets.ART_KEY }} --secret ${{ secrets.ART_SECRET }}
-          art app deploy -f .art/argonaut-preprod-test.yaml --set image="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test" --set 'labels.argonaut\.dev/git-provider'='github' --set  argonaut.git-provider='github' --set  imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}"  --set appName="test-${{ GITHUB_REF_NAME }}"  --set argonaut.env="preprod"  --set argonaut.region="us-east-2"  --set argonaut.cluster="preprod"  --set argonaut.serviceType="stateless"  --set argonaut.imageRegistry="ecr" 
+          art app deploy -f .art/argonaut-preprod-test.yaml --set image="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com/argonaut/test" --set 'labels.argonaut\.dev/git-provider'='github' --set  argonaut.git-provider='github' --set  imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}"  --set appName="test-${{ steps.get_branch.outputs.BRANCH }}"  --set argonaut.env="preprod"  --set argonaut.region="us-east-2"  --set argonaut.cluster="preprod"  --set argonaut.serviceType="stateless"  --set argonaut.imageRegistry="ecr" 
 
