@@ -1,1 +1,1 @@
-echo "Hello world"
+run echo "Hello world"
