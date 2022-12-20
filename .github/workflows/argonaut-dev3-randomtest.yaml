@@ -47,12 +47,6 @@ jobs:
         run: |
           art configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
           art app envvars get -f .art/argonaut-dev3-wahal-randomtest.yaml \
-            --set appName="randomtest" \
-            --set argonaut.env="dev3" \
-            --set argonaut.region="us-east-2" \
-            --set argonaut.cluster="wahal" \
-            --set argonaut.serviceType="stateless" \
-            --set argonaut.imageRegistry="ecr" \
             --type buildtime \
             --format dotenv > art-build-secrets.env
           echo 'ART_BUILD_SECRETS_FILE<<EOF' >> $GITHUB_ENV
@@ -116,10 +110,4 @@ jobs:
           sudo mv ./art /usr/local/bin/art
           art configure --key ${{ secrets.dev_ART_KEY }} --secret ${{ secrets.dev_ART_SECRET }}
           art app deploy -f .art/argonaut-dev3-wahal-randomtest.yaml \
-            --set  imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}" \
-            --set appName="randomtest" \
-            --set argonaut.env="dev3" \
-            --set argonaut.region="us-east-2" \
-            --set argonaut.cluster="wahal" \
-            --set argonaut.serviceType="stateless" \
-            --set argonaut.imageRegistry="ecr" 
+            --set  imageTag="${{ steps.get_sha.outputs.SHA_SHORT }}" 
